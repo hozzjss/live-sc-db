@@ -1,0 +1,22 @@
+{
+  "name": "live-sc-db",
+  "version": "1.0.0",
+  "description": "A living discord socket that updates the db that sourcecred consumes ",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hozzjss/live-sc-db.git"
+  },
+  "keywords": [
+    "sourcecred"
+  ],
+  "author": "hz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hozzjss/live-sc-db/issues"
+  },
+  "homepage": "https://github.com/hozzjss/live-sc-db#readme"
+}
