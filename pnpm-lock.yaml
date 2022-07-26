@@ -6,6 +6,7 @@ specifiers:
   discord.js: ^14.0.3
   dotenv: ^16.0.1
   json-stable-stringify: ^1.0.1
+  prettier: ^2.7.1
   ts-node: ^10.9.1
   ts-node-dev: ^2.0.0
   typescript: ^4.7.4
@@ -16,6 +17,7 @@ dependencies:
   discord.js: 14.0.3
   dotenv: 16.0.1
   json-stable-stringify: 1.0.1
+  prettier: 2.7.1
   ts-node: 10.9.1_f6w67sjx3imwytyzb2qhabnzqe
   ts-node-dev: 2.0.0_f6w67sjx3imwytyzb2qhabnzqe
   typescript: 4.7.4
@@ -542,6 +544,12 @@ packages:
       simple-get: 4.0.1
       tar-fs: 2.1.1
       tunnel-agent: 0.6.0
+    dev: false
+
+  /prettier/2.7.1:
+    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
     dev: false
 
   /pump/3.0.0:

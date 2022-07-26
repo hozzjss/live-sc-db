@@ -4,11 +4,17 @@ import {config} from "dotenv";
 config()
 
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.MessageContent]
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+    ]
 })
 
 client.on('ready', () => {
-    const channels = client.guilds.fetch()
+    // const channels = client.guilds.fetch()
+    console.log(process.env.GUILDS)
 })
 
 
