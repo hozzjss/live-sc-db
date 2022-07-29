@@ -4,7 +4,9 @@ export enum UpdateType {
   ADD_REACTION,
   ADD_MESSAGE,
   DELETE_MESSAGE,
-  DELETE_REACTION
+  DELETE_REACTION,
+  ADD_MEMBER,
+  DELETE_MEMBER
 }
 
 export interface IAddReactionUpdate {
@@ -31,4 +33,20 @@ export interface IDeleteReactionUpdate {
   }
 }
 
-export type IUpdate = IAddMessageUpdate | IAddReactionUpdate | IDeleteMessageUpdate | IDeleteReactionUpdate
+export interface IAddMemberUpdate {
+  type: UpdateType.ADD_MEMBER,
+  payload: Model.GuildMember
+}
+
+export interface IDeleteMemberUpdate {
+  type: UpdateType.DELETE_MEMBER,
+  payload: Model.Snowflake
+}
+
+export type IUpdate =
+  IAddMessageUpdate
+  | IAddReactionUpdate
+  | IDeleteMessageUpdate
+  | IDeleteReactionUpdate
+  | IAddMemberUpdate
+  | IDeleteMemberUpdate

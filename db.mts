@@ -562,4 +562,28 @@ export class SqliteMirrorRepository {
         role
       });
   }
+
+  deleteMember(user_id: Model.Snowflake) {
+    this._db
+      .prepare(
+        dedent`\
+          DELETE FROM members 
+          WHERE user_id = :user_id
+        `
+      )
+      .run({
+        user_id
+      });
+
+    this._db
+      .prepare(
+        dedent`\
+          DELETE FROM member_roles
+          WHERE user_id = :user_id
+        `
+      )
+      .run({
+        user_id
+      });
+  }
 }
