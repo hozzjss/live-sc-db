@@ -97,7 +97,7 @@ client.ws.on(GatewayDispatchEvents.MessageCreate, (message: GatewayMessageCreate
         channelId: message.channel_id,
         mentions: message.mentions.map((user) => ({
           userId: user.id,
-          count: message.content.search(`<@!?${user.id}>`)
+          count: Math.abs(message.content.search(`<@!?${user.id}>`))
         })),
         nonUserAuthor: message.webhook_id != null || false,
         reactionEmoji: [],
