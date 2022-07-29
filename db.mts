@@ -544,6 +544,41 @@ export class SqliteMirrorRepository {
     }
   }
 
+  updateMember(member: Model.GuildMember) {
+    this._db
+      .prepare(
+        dedent`\
+          UPDATE members 
+          SET
+              username = :username,
+              discriminator = :discriminator,
+              nick = :nick
+          WHERE user_id = :user_id
+        `
+      )
+      .run({
+        user_id: member.user.id,
+        username: member.user.username,
+        discriminator: member.user.discriminator,
+        nick: member.nick || null
+      });
+    // reset all roles fuck performance
+    this._db
+      .prepare(
+        dedent`\
+          DELETE FROM member_roles 
+          WHERE user_id = :user_id
+        `
+      )
+      .run({
+        user_id: member.user.id
+      });
+
+    for (const role of member.roles) {
+      this.addMemberRole(member.user.id, role);
+    }
+  }
+
   addMemberRole(user: Model.Snowflake, role: Model.Snowflake) {
     this._db
       .prepare(
@@ -584,6 +619,21 @@ export class SqliteMirrorRepository {
       )
       .run({
         user_id
+      });
+  }
+
+  removeMemberRole(user: Model.Snowflake, role: Model.Snowflake) {
+    this._db
+      .prepare(
+        dedent`\
+          DELETE FROM member_roles 
+          WHERE user_id = :user_id
+          AND   role = :role
+        `
+      )
+      .run({
+        user_id: user,
+        role
       });
   }
 }

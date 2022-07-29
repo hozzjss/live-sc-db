@@ -8,7 +8,7 @@ import schedule from "node-schedule";
 import {
   IAddMemberUpdate,
   IAddMessageUpdate,
-  IAddReactionUpdate,
+  IAddReactionUpdate, IUpdateMemberUpdate,
   IDeleteMemberUpdate,
   IDeleteMessageUpdate,
   IDeleteReactionUpdate,
@@ -18,7 +18,7 @@ import {
 import {
   GatewayDispatchEvents,
   GatewayGuildMemberAddDispatchData,
-  GatewayGuildMemberRemoveDispatchData,
+  GatewayGuildMemberRemoveDispatchData, GatewayGuildMemberUpdateDispatchData,
   GatewayMessageCreateDispatchData,
   GatewayMessageReactionAddDispatchData,
   GatewayMessageReactionRemoveDispatchData
@@ -156,6 +156,27 @@ client.ws.on(GatewayDispatchEvents.GuildMemberRemove, (member: GatewayGuildMembe
   }
 });
 
+client.ws.on(GatewayDispatchEvents.GuildMemberUpdate, (member: GatewayGuildMemberUpdateDispatchData) => {
+  if (member.guild_id === stacks) {
+    const update: IUpdateMemberUpdate = {
+      type: UpdateType.UPDATE_MEMBER,
+      payload: {
+        user: {
+          id: member.user.id,
+          bot: member.user.bot,
+          discriminator: member.user.discriminator,
+          username: member.user.username
+        },
+        nick: member.nick,
+        roles: member.roles
+      }
+    };
+    db.data.updates.push(update);
+    db.write();
+  }
+});
+
+
 const handleAddReaction = (data: IAddReactionUpdate) => {
   stacks_repo.addReaction(data.payload);
 };
@@ -180,13 +201,18 @@ const handleDeleteMember = (data: IDeleteMemberUpdate) => {
   stacks_repo.deleteMember(data.payload);
 };
 
+const handleUpdateMember = (data: IUpdateMemberUpdate) => {
+  stacks_repo.updateMember(data.payload);
+};
+
 const updateFns: { [x: number]: (data: IUpdate) => any } = {
   [UpdateType.ADD_REACTION]: handleAddReaction,
   [UpdateType.DELETE_REACTION]: handleDeleteReaction,
   [UpdateType.ADD_MESSAGE]: handleAddMessage,
   [UpdateType.DELETE_MESSAGE]: handleDeleteMessage,
   [UpdateType.ADD_MEMBER]: handleAddMember,
-  [UpdateType.DELETE_MEMBER]: handleDeleteMember
+  [UpdateType.DELETE_MEMBER]: handleDeleteMember,
+  [UpdateType.UPDATE_MEMBER]: handleUpdateMember
 };
 
 schedule.scheduleJob("0 * * * *", async () => {
@@ -202,13 +228,13 @@ schedule.scheduleJob("0 * * * *", async () => {
         index++;
         console.info("Update", update, "completed!");
       } catch (e) {
-        console.log("failed to apply update", update, "because", e);
+        console.warn("failed to apply update", update, "because", e);
       }
     }
 
     await db.write();
   } else {
-    console.log("No updates");
+    console.info("No updates");
   }
 });
 
