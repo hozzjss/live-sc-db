@@ -4,6 +4,7 @@ import { SqliteMirrorRepository } from "./db.mjs";
 import { join as pathJoin } from "path";
 import Database from "better-sqlite3";
 import { JSONFile, Low } from "lowdb";
+import schedule from "node-schedule";
 import {
   IAddMemberUpdate,
   IAddMessageUpdate,
@@ -188,7 +189,7 @@ const updateFns: { [x: number]: (data: IUpdate) => any } = {
   [UpdateType.DELETE_MEMBER]: handleDeleteMember
 };
 
-setInterval(async () => {
+schedule.scheduleJob("0 * * * *", async () => {
   await db.read();
   const updates = db.data.updates;
   if (updates.length) {
@@ -209,7 +210,7 @@ setInterval(async () => {
   } else {
     console.log("No updates");
   }
-}, 10000);
+});
 
 client.login(process.env.SOURCECRED_DISCORD_TOKEN);
 
